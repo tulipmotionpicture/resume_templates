@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Resume Template 6</title>
+    <script>
+        // This template receives data via postMessage from ResumePreview.tsx
+        // No need for ResumeDataLoader class anymore
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        /* Universal text overflow handling */
+        .sidebar *, .main-content * {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+            max-width: 100%;
+        }
+
+        /* Aggressive text breaking for URLs and long content */
+        .sidebar {
+            overflow-wrap: break-word;
+            word-break: break-word;
+            hyphens: auto;
+        }
+
+        .sidebar * {
+            max-width: 100%;
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
+
+        /* Force break long URLs and text */
+        a, .contact-text, .skill-name, .project-link, 
+        .contact-item, .contact-item *, 
+        [href], [href] * {
+            word-break: break-all !important;
+            overflow-wrap: break-word !important;
+            hyphens: none !important;
+            max-width: 100% !important;
+            white-space: normal !important;
+        }
+
+        .container {
+            max-width: 210mm;
+            margin: 20px auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            min-height: 297mm;
+        }
+
+        .sidebar {
+            background: #2c3e50;
+            color: white;
+            padding: 40px 30px;
+        }
+
+        .main-content {
+            padding: 40px 35px;
+            background: white;
+        }
+
+        .profile-section {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #34495e;
+        }
+
+        .name {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .title {
+            font-size: 16px;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .section {
+            margin-bottom: 35px;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateZ(0);
+        }
+
+        .section.draggable {
+            cursor: grab;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px -15px;
+            transition: all 0.3s ease;
+        }
+
+        .section.draggable:hover {
+            background-color: rgba(0,0,0,0.02);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .section.being-dragged {
+            opacity: 0.5;
+            transform: rotate(2deg) scale(0.95);
+            z-index: 1000;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sidebar .section-title {
+            color: #ecf0f1;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+        }
+
+        .main-content .section-title {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+        }
+
+        .contact-item {
+            margin-bottom: 15px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-all;
+            max-width: 100%;
+            min-width: 0;
+            white-space: normal;
+            hyphens: none;
+        }
+
+        .contact-label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .contact-text {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .skill-item {
+            margin-bottom: 20px;
+        }
+
+        .skill-name {
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .skill-bar {
+            background: #34495e;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            background: #3498db;
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .skill-percentage {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .experience-item, .education-item {
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .experience-item:last-child, .education-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .job-title, .degree-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .company, .institution {
+            font-size: 16px;
+            color: #3498db;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .date-range {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .description {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .summary-text {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #555;
+            text-align: justify;
+        }
+
+        /* Drag and drop placeholder */
+        .drag-placeholder {
+            height: 4px;
+            background: #3498db;
+            margin: 10px 0;
+            border-radius: 2px;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+        }
+
+        .drag-over {
+            background-color: rgba(52, 152, 219, 0.1);
+            border: 2px dashed #3498db;
+        }
+
+        /* Print styles */
+        @media print {
+            body { background: white; }
+            .container { 
+                box-shadow: none; 
+                margin: 0;
+                max-width: none;
+                width: 100%;
+            }
+            .section.draggable:hover {
+                background-color: transparent;
+                transform: none;
+                box-shadow: none;
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                margin: 10px;
+            }
+            
+            .sidebar {
+                padding: 25px 20px;
+            }
+            
+            .main-content {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="profile-section">
+                <h1 class="name" contenteditable="true">John Smith</h1>
+                <p class="title" contenteditable="true">Software Engineer</p>
+            </div>
+
+            <div class="section draggable" data-section="contact">
+                <h2 class="section-title">Contact</h2>
+                <div class="contact-item">
+                    <div class="contact-label">Email</div>
+                    <div class="contact-text" contenteditable="true">john.smith@email.com</div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-label">Phone</div>
+                    <div class="contact-text" contenteditable="true">+1-555-123-4567</div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-label">Location</div>
+                    <div class="contact-text" contenteditable="true">New York, NY</div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-label">LinkedIn</div>
+                    <div class="contact-text" contenteditable="true">linkedin.com/in/johnsmith</div>
+                </div>
+            </div>
+
+            <div class="section draggable" data-section="skills">
+                <h2 class="section-title">Skills</h2>
+                <div class="skill-item">
+                    <div class="skill-name" contenteditable="true">JavaScript</div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 90%"></div>
+                    </div>
+                    <div class="skill-percentage">90%</div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name" contenteditable="true">Python</div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 85%"></div>
+                    </div>
+                    <div class="skill-percentage">85%</div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name" contenteditable="true">React</div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 80%"></div>
+                    </div>
+                    <div class="skill-percentage">80%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="section draggable" data-section="summary">
+                <h2 class="section-title">Professional Summary</h2>
+                <p class="summary-text" contenteditable="true">
+                    Experienced software engineer with 5+ years of expertise in full-stack development. 
+                    Proven track record of delivering scalable web applications and leading cross-functional teams. 
+                    Passionate about clean code, innovative solutions, and continuous learning.
+                </p>
+            </div>
+
+            <div class="section draggable" data-section="experience">
+                <h2 class="section-title">Work Experience</h2>
+                <div class="experience-item">
+                    <h3 class="job-title" contenteditable="true">Senior Software Engineer</h3>
+                    <div class="company" contenteditable="true">Tech Solutions Inc.</div>
+                    <div class="date-range" contenteditable="true">Jan 2020 - Present</div>
+                    <p class="description" contenteditable="true">
+                        Led development of microservices architecture serving 1M+ users. 
+                        Implemented CI/CD pipelines reducing deployment time by 60%. 
+                        Mentored junior developers and conducted code reviews.
+                    </p>
+                </div>
+                <div class="experience-item">
+                    <h3 class="job-title" contenteditable="true">Software Engineer</h3>
+                    <div class="company" contenteditable="true">Digital Innovations</div>
+                    <div class="date-range" contenteditable="true">Jun 2018 - Dec 2019</div>
+                    <p class="description" contenteditable="true">
+                        Developed responsive web applications using React and Node.js. 
+                        Collaborated with UX/UI designers to implement pixel-perfect designs. 
+                        Optimized database queries improving performance by 40%.
+                    </p>
+                </div>
+            </div>
+
+            <div class="section draggable" data-section="education">
+                <h2 class="section-title">Education</h2>
+                <div class="education-item">
+                    <h3 class="degree-title" contenteditable="true">Bachelor of Science in Computer Science</h3>
+                    <div class="institution" contenteditable="true">University of Technology</div>
+                    <div class="date-range" contenteditable="true">2014 - 2018</div>
+                    <p class="description" contenteditable="true">
+                        Graduated Magna Cum Laude. Relevant coursework: Data Structures, 
+                        Algorithms, Software Engineering, Database Systems.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Listen for messages from parent window (ResumePreview.tsx)
+        window.addEventListener("message", function (event) {
+            console.log("Message received:", event.data);
+            if (event.data && event.data.type === "RESUME_DATA") {
+                console.log("Processing resume data:", event.data.payload);
+                renderResumeData(event.data.payload);
+            }
+        });
+
+        // Function to render resume data to the template
+        function renderResumeData(data) {
+            console.log("Rendering data:", data);
+
+            // Handle missing data structure to prevent errors
+            if (!data) {
+                console.error("No data provided to renderResumeData");
+                return;
+            }
+
+            // Ensure we have sections object
+            if (!data.sections) {
+                data.sections = {};
+            }
+
+            // Move common data into sections for consistent rendering
+            if (data.skills && !data.sections.skills) {
+                data.sections.skills = data.skills;
+            }
+
+            if (data.workHistory && !data.sections.workExperience) {
+                data.sections.workExperience = data.workHistory;
+            } else if (data.workExperience && !data.sections.workExperience) {
+                data.sections.workExperience = data.workExperience;
+            }
+
+            if (data.education && !data.sections.education) {
+                data.sections.education = data.education;
+            }
+
+            if (data.certifications && !data.sections.certifications) {
+                data.sections.certifications = data.certifications;
+            }
+
+            if (data.languages && !data.sections.languages) {
+                data.sections.languages = data.languages;
+            }
+
+            if (data.accomplishments && !data.sections.accomplishments) {
+                data.sections.accomplishments = data.accomplishments;
+            }
+
+            if (data.interests && !data.sections.interests) {
+                data.sections.interests = data.interests;
+            }
+
+            if (data.additionalInfo && !data.sections.additionalInfo) {
+                data.sections.additionalInfo = data.additionalInfo;
+            }
+
+            // Ensure personalInfo exists
+            if (!data.personalInfo) {
+                data.personalInfo = {};
+            }
+
+            // Render personal information
+            console.log("Rendering personal info:", data.personalInfo);
+            if (data.personalInfo.fullName) {
+                const nameElement = document.querySelector('.name');
+                console.log("Name element found:", nameElement);
+                if (nameElement) {
+                    nameElement.textContent = data.personalInfo.fullName;
+                    console.log("Name updated to:", data.personalInfo.fullName);
+                }
+            }
+
+            if (data.personalInfo.professionalTitle) {
+                const titleElement = document.querySelector('.title');
+                console.log("Title element found:", titleElement);
+                if (titleElement) {
+                    titleElement.textContent = data.personalInfo.professionalTitle;
+                    console.log("Title updated to:", data.personalInfo.professionalTitle);
+                }
+            }
+
+            // Render contact information
+            renderContactInfo(data.personalInfo);
+
+            // Render professional summary
+            if (data.personalInfo.professionalSummary) {
+                const summaryElement = document.querySelector('.summary-text');
+                if (summaryElement) summaryElement.textContent = data.personalInfo.professionalSummary;
+            }
+
+            // Render all sections
+            renderSections(data.sections);
+
+            // Hide empty sections after rendering
+            hideEmptySections();
+        }
+
+        function renderContactInfo(personalInfo) {
+            console.log("Rendering contact info:", personalInfo);
+            const contactItems = document.querySelectorAll('.contact-text');
+            console.log("Contact items found:", contactItems.length);
+
+            if (contactItems.length >= 4) {
+                if (personalInfo.email) {
+                    contactItems[0].textContent = personalInfo.email;
+                    console.log("Email updated to:", personalInfo.email);
+                }
+                if (personalInfo.phone) {
+                    contactItems[1].textContent = personalInfo.phone;
+                    console.log("Phone updated to:", personalInfo.phone);
+                }
+                if (personalInfo.address) {
+                    contactItems[2].textContent = personalInfo.address;
+                    console.log("Address updated to:", personalInfo.address);
+                }
+                if (personalInfo.linkedin) {
+                    contactItems[3].textContent = personalInfo.linkedin;
+                    console.log("LinkedIn updated to:", personalInfo.linkedin);
+                }
+            }
+        }
+
+        function proficiencyToPercentage(level, maxLevel = 10) {
+            return (level / maxLevel) * 100;
+        }
+
+        // Function to dynamically render all sections
+        function renderSections(sections) {
+            // Render each section based on its type
+            for (const [sectionKey, sectionData] of Object.entries(sections)) {
+                switch (sectionKey) {
+                    case 'skills':
+                        renderSkills(sectionData);
+                        break;
+                    case 'workExperience':
+                        renderWorkExperience(sectionData);
+                        break;
+                    case 'education':
+                        renderEducation(sectionData);
+                        break;
+                    case 'certifications':
+                        renderCertifications(sectionData);
+                        break;
+                    case 'languages':
+                        renderLanguages(sectionData);
+                        break;
+                    case 'accomplishments':
+                        renderAccomplishments(sectionData);
+                        break;
+                    case 'interests':
+                        renderInterests(sectionData);
+                        break;
+                    case 'additionalInfo':
+                        renderAdditionalInfo(sectionData);
+                        break;
+                    default:
+                        // Handle any custom sections
+                        renderCustomSection(sectionKey, sectionData);
+                        break;
+                }
+            }
+        }
+
+        // Function to render skills
+        function renderSkills(skills) {
+            const skillsContainer = document.querySelector('.section[data-section="skills"]');
+            if (!skillsContainer) return;
+
+            // Remove existing skill items but keep the section title
+            const existingSkills = skillsContainer.querySelectorAll('.skill-item');
+            existingSkills.forEach(skill => skill.remove());
+
+            if (skills && skills.length > 0) {
+                skills.forEach(skill => {
+                    const skillElement = document.createElement('div');
+                    skillElement.className = 'skill-item';
+
+                    const percentage = proficiencyToPercentage(skill.proficiencyLevel || skill.proficiency || skill.level || 5);
+
+                    skillElement.innerHTML = `
+                        <div class="skill-name" contenteditable="true">${skill.name || ''}</div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: ${percentage}%"></div>
+                        </div>
+                        <div class="skill-percentage">${percentage}%</div>
+                    `;
+
+                    skillsContainer.appendChild(skillElement);
+                });
+                skillsContainer.style.display = 'block';
+            } else {
+                skillsContainer.style.display = 'none';
+            }
+        }
+
+        // Function to render work experience
+        function renderWorkExperience(experiences) {
+            const experienceContainer = document.querySelector('.section[data-section="experience"]');
+            if (!experienceContainer) return;
+
+            // Remove existing experience items but keep the section title
+            const existingExperiences = experienceContainer.querySelectorAll('.experience-item');
+            existingExperiences.forEach(exp => exp.remove());
+
+            if (experiences && experiences.length > 0) {
+                experiences.forEach(exp => {
+                    const expElement = document.createElement('div');
+                    expElement.className = 'experience-item';
+
+                    const endDate = exp.current || exp.isCurrent ? 'Present' : (exp.endDate || '');
+
+                    expElement.innerHTML = `
+                        <h3 class="job-title" contenteditable="true">${exp.position || exp.title || ''}</h3>
+                        <div class="company" contenteditable="true">${exp.company || ''}</div>
+                        <div class="date-range" contenteditable="true">${exp.startDate || ''} - ${endDate}</div>
+                        <p class="description" contenteditable="true">${exp.description || ''}</p>
+                    `;
+
+                    experienceContainer.appendChild(expElement);
+                });
+                experienceContainer.style.display = 'block';
+            } else {
+                experienceContainer.style.display = 'none';
+            }
+        }
+
+        // Function to render education
+        function renderEducation(educations) {
+            const educationContainer = document.querySelector('.section[data-section="education"]');
+            if (!educationContainer) return;
+
+            // Remove existing education items but keep the section title
+            const existingEducations = educationContainer.querySelectorAll('.education-item');
+            existingEducations.forEach(edu => edu.remove());
+
+            if (educations && educations.length > 0) {
+                educations.forEach(edu => {
+                    const eduElement = document.createElement('div');
+                    eduElement.className = 'education-item';
+
+                    const degreeText = edu.degree && edu.fieldOfStudy ? `${edu.degree} in ${edu.fieldOfStudy}` : (edu.degree || edu.title || '');
+                    const dateRange = edu.startYear && edu.endYear ? `${edu.startYear} - ${edu.endYear}` : `${edu.startDate || ''} - ${edu.endDate || ''}`;
+
+                    eduElement.innerHTML = `
+                        <h3 class="degree-title" contenteditable="true">${degreeText}</h3>
+                        <div class="institution" contenteditable="true">${edu.university || edu.institution || edu.school || ''}</div>
+                        <div class="date-range" contenteditable="true">${dateRange}</div>
+                        <p class="description" contenteditable="true">${edu.gpa ? `GPA: ${edu.gpa}` : (edu.description || '')}</p>
+                    `;
+
+                    educationContainer.appendChild(eduElement);
+                });
+                educationContainer.style.display = 'block';
+            } else {
+                educationContainer.style.display = 'none';
+            }
+        }
+
+        // Function to render certifications
+        function renderCertifications(certifications) {
+            console.log(`Certifications section not available in this template`);
+        }
+
+        // Function to render languages
+        function renderLanguages(languages) {
+            console.log(`Languages section not available in this template`);
+        }
+
+        // Function to render accomplishments
+        function renderAccomplishments(accomplishments) {
+            console.log(`Accomplishments section not available in this template`);
+        }
+
+        // Function to render interests
+        function renderInterests(interests) {
+            console.log(`Interests section not available in this template`);
+        }
+
+        // Function to render additional info
+        function renderAdditionalInfo(additionalInfo) {
+            console.log(`Additional info section not available in this template`);
+        }
+
+        // Function to render any custom sections not explicitly handled
+        function renderCustomSection(sectionKey, sectionData) {
+            console.log(`Custom section ${sectionKey} not implemented in this template`);
+        }
+
+        // Drag and Drop Functionality
+        let draggedElement = null;
+        let placeholder = null;
+        let dropPosition = null;
+        let targetElement = null;
+
+        function updateDropPosition(e, target) {
+            if (!target || !draggedElement) return;
+
+            target.classList.add('drag-over');
+            const rect = target.getBoundingClientRect();
+            const midpoint = rect.top + rect.height / 2;
+            const insertBefore = e.clientY < midpoint;
+
+            dropPosition = {
+                target: target,
+                insertBefore: insertBefore,
+                parent: target.parentNode,
+                nextSibling: insertBefore ? target : target.nextSibling
+            };
+
+            if (placeholder && placeholder.parentNode) {
+                placeholder.parentNode.removeChild(placeholder);
+            }
+
+            try {
+                if (insertBefore) {
+                    target.parentNode.insertBefore(placeholder, target);
+                } else {
+                    target.parentNode.insertBefore(placeholder, target.nextSibling);
+                }
+
+                requestAnimationFrame(() => {
+                    if (placeholder && placeholder.parentNode) {
+                        placeholder.style.opacity = '1';
+                        placeholder.style.transform = 'scale(1)';
+                    }
+                });
+            } catch (error) {
+                console.log('Placeholder insertion failed:', error);
+            }
+        }
+
+        function createPlaceholder() {
+            const div = document.createElement('div');
+            div.className = 'drag-placeholder';
+            div.style.opacity = '0';
+            div.style.transform = 'scale(0.8)';
+            return div;
+        }
+
+        function handleDragStart(e) {
+            draggedElement = this;
+            this.classList.add('being-dragged');
+
+            placeholder = createPlaceholder();
+
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.outerHTML);
+
+            setTimeout(() => {
+                this.style.opacity = '0.5';
+            }, 0);
+        }
+
+        function handleDragEnd(e) {
+            this.classList.remove('being-dragged');
+            this.style.opacity = '';
+
+            document.querySelectorAll('.drag-over').forEach(el => {
+                el.classList.remove('drag-over');
+            });
+
+            if (placeholder && placeholder.parentNode) {
+                placeholder.parentNode.removeChild(placeholder);
+            }
+
+            draggedElement = null;
+            placeholder = null;
+            dropPosition = null;
+            targetElement = null;
+        }
+
+        function handleDragEnter(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (!draggedElement || this === draggedElement || !this.classList.contains('draggable')) {
+                return;
+            }
+
+            const draggedContainer = draggedElement.closest('.sidebar, .main-content');
+            const targetContainer = this.closest('.sidebar, .main-content');
+
+            if (draggedContainer !== targetContainer) {
+                return;
+            }
+
+            targetElement = this;
+            updateDropPosition(e, this);
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (!draggedElement || this === draggedElement || !this.classList.contains('draggable')) {
+                return;
+            }
+
+            updateDropPosition(e, this);
+            e.dataTransfer.dropEffect = 'move';
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (!this.contains(e.relatedTarget)) {
+                this.classList.remove('drag-over');
+            }
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            document.querySelectorAll('.drag-over').forEach(el => {
+                el.classList.remove('drag-over');
+            });
+
+            if (!draggedElement || !dropPosition) {
+                return false;
+            }
+
+            const draggedContainer = draggedElement.closest('.sidebar, .main-content');
+            const targetContainer = dropPosition.target.closest('.sidebar, .main-content');
+
+            if (draggedContainer !== targetContainer) {
+                return false;
+            }
+
+            try {
+                if (placeholder && placeholder.parentNode) {
+                    placeholder.parentNode.removeChild(placeholder);
+                }
+
+                if (dropPosition.nextSibling && dropPosition.nextSibling.parentNode) {
+                    dropPosition.parent.insertBefore(draggedElement, dropPosition.nextSibling);
+                } else {
+                    dropPosition.parent.appendChild(draggedElement);
+                }
+
+                draggedElement.style.transition = 'transform 0.2s ease';
+                draggedElement.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    draggedElement.style.transform = '';
+                    setTimeout(() => {
+                        draggedElement.style.transition = '';
+                    }, 200);
+                }, 100);
+
+            } catch (error) {
+                console.log('Drop failed:', error);
+            }
+
+            return false;
+        }
+
+        // Initialize drag and drop
+        document.addEventListener('DOMContentLoaded', function() {
+            const draggableElements = document.querySelectorAll('.draggable');
+
+            draggableElements.forEach(element => {
+                element.draggable = true;
+                element.addEventListener('dragstart', handleDragStart);
+                element.addEventListener('dragend', handleDragEnd);
+                element.addEventListener('dragenter', handleDragEnter);
+                element.addEventListener('dragover', handleDragOver);
+                element.addEventListener('dragleave', handleDragLeave);
+                element.addEventListener('drop', handleDrop);
+            });
+        });
+
+        // Hide empty sections
+        function hideEmptySections() {
+            const sections = document.querySelectorAll('.section[data-section]');
+            sections.forEach(section => {
+                const sectionType = section.getAttribute('data-section');
+                let isEmpty = false;
+
+                if (sectionType === 'contact') {
+                    const contactTexts = section.querySelectorAll('.contact-text');
+                    isEmpty = Array.from(contactTexts).every(text => !text.textContent.trim());
+                } else if (sectionType === 'skills') {
+                    const skillNames = section.querySelectorAll('.skill-name');
+                    isEmpty = Array.from(skillNames).every(skill => !skill.textContent.trim());
+                } else if (sectionType === 'experience') {
+                    const jobTitles = section.querySelectorAll('.job-title');
+                    isEmpty = Array.from(jobTitles).every(title => !title.textContent.trim());
+                } else if (sectionType === 'education') {
+                    const degreeTitles = section.querySelectorAll('.degree-title');
+                    isEmpty = Array.from(degreeTitles).every(title => !title.textContent.trim());
+                } else if (sectionType === 'summary') {
+                    const summaryText = section.querySelector('.summary-text');
+                    isEmpty = !summaryText || !summaryText.textContent.trim();
+                }
+
+                section.style.display = isEmpty ? 'none' : 'block';
+            });
+        }
+
+        // Check for empty sections on load and content change
+        document.addEventListener('DOMContentLoaded', hideEmptySections);
+        document.addEventListener('input', hideEmptySections);
+
+        // Re-initialize drag and drop after data is loaded
+        window.addEventListener("message", function (event) {
+            if (event.data && event.data.type === "RESUME_DATA") {
+                setTimeout(() => {
+                    const draggableElements = document.querySelectorAll('.draggable');
+
+                    draggableElements.forEach(element => {
+                        element.draggable = true;
+                        element.addEventListener('dragstart', handleDragStart);
+                        element.addEventListener('dragend', handleDragEnd);
+                        element.addEventListener('dragenter', handleDragEnter);
+                        element.addEventListener('dragover', handleDragOver);
+                        element.addEventListener('dragleave', handleDragLeave);
+                        element.addEventListener('drop', handleDrop);
+                    });
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>

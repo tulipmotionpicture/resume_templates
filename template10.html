@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Resume Template 10</title>
+    <script>
+        // This template receives data via postMessage from ResumePreview.tsx
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2d3748;
+            background-color: #f7fafc;
+        }
+
+        /* Universal text overflow handling */
+        .container * {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+            max-width: 100%;
+        }
+
+        /* Force break long URLs and text */
+        a, .contact-text, .skill-name, .project-link, 
+        .contact-item, .contact-item *, 
+        [href], [href] * {
+            word-break: break-all !important;
+            overflow-wrap: break-word !important;
+            hyphens: none !important;
+            max-width: 100% !important;
+            white-space: normal !important;
+        }
+
+        .container {
+            max-width: 210mm;
+            margin: 20px auto;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            min-height: 297mm;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 20px solid #2d3748;
+        }
+
+        .name {
+            font-size: 36px;
+            font-weight: 300;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .title {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 25px;
+            font-weight: 300;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .contact-item {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-size: 14px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-all;
+            max-width: 100%;
+            min-width: 0;
+            white-space: normal;
+            hyphens: none;
+        }
+
+        .content {
+            padding: 60px 40px 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateZ(0);
+        }
+
+        .section.draggable {
+            cursor: grab;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px -15px;
+            transition: all 0.3s ease;
+        }
+
+        .section.draggable:hover {
+            background-color: rgba(0,0,0,0.02);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .section.being-dragged {
+            opacity: 0.5;
+            transform: rotate(2deg) scale(0.95);
+            z-index: 1000;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #2d3748;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 30px;
+            background: linear-gradient(135deg, #4a5568, #2d3748);
+            border-radius: 2px;
+        }
+
+        .summary-text {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #4a5568;
+            text-align: justify;
+            background: #f7fafc;
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 4px solid #4a5568;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e2e8f0;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid #4a5568;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -32px;
+            top: 25px;
+            width: 12px;
+            height: 12px;
+            background: #4a5568;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px #e2e8f0;
+        }
+
+        .job-title, .degree-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .company, .institution {
+            font-size: 16px;
+            color: #4a5568;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .date-range {
+            font-size: 14px;
+            color: #718096;
+            margin-bottom: 15px;
+            background: #edf2f7;
+            padding: 4px 12px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        .description {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #4a5568;
+        }
+
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .skill-group {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .skill-group-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .skill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 8px 0;
+        }
+
+        .skill-name {
+            font-size: 14px;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        .skill-level {
+            font-size: 12px;
+            color: #718096;
+            background: #edf2f7;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        /* Drag and drop placeholder */
+        .drag-placeholder {
+            height: 4px;
+            background: #4a5568;
+            margin: 10px 0;
+            border-radius: 2px;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+        }
+
+        .drag-over {
+            background-color: rgba(74, 85, 104, 0.05);
+            border: 2px dashed #4a5568;
+        }
+
+        /* Print styles */
+        @media print {
+            body { background: white; }
+            .container { 
+                box-shadow: none; 
+                margin: 0;
+                max-width: none;
+                width: 100%;
+                border-radius: 0;
+            }
+            .section.draggable:hover {
+                background-color: transparent;
+                transform: none;
+                box-shadow: none;
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 0;
+            }
+            
+            .header {
+                padding: 25px 20px;
+            }
+            
+            .content {
+                padding: 40px 20px 20px;
+            }
+            
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .skills-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="name" contenteditable="true">David Thompson</h1>
+            <p class="title" contenteditable="true">UX/UI Designer</p>
+            
+            <div class="contact-info">
+                <div class="contact-item" contenteditable="true">david.thompson@email.com</div>
+                <div class="contact-item" contenteditable="true">+1-555-147-8520</div>
+                <div class="contact-item" contenteditable="true">San Francisco, CA</div>
+                <div class="contact-item" contenteditable="true">linkedin.com/in/davidthompson</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="section draggable" data-section="summary">
+                <h2 class="section-title">Professional Summary</h2>
+                <p class="summary-text" contenteditable="true">
+                    Creative UX/UI designer with 6+ years of experience crafting user-centered digital experiences. 
+                    Expertise in design thinking, prototyping, and user research. Successfully led design projects 
+                    for Fortune 500 companies, resulting in 45% increase in user engagement and 30% improvement 
+                    in conversion rates.
+                </p>
+            </div>
+
+            <div class="section draggable" data-section="experience">
+                <h2 class="section-title">Work Experience</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h3 class="job-title" contenteditable="true">Senior UX/UI Designer</h3>
+                        <div class="company" contenteditable="true">Design Studio Pro</div>
+                        <div class="date-range" contenteditable="true">Jan 2021 - Present</div>
+                        <p class="description" contenteditable="true">
+                            Lead design for mobile and web applications serving 2M+ users. 
+                            Conduct user research and usability testing to inform design decisions. 
+                            Collaborate with product managers and developers in agile environment.
+                        </p>
+                    </div>
+                    <div class="timeline-item">
+                        <h3 class="job-title" contenteditable="true">UX Designer</h3>
+                        <div class="company" contenteditable="true">Creative Agency Inc.</div>
+                        <div class="date-range" contenteditable="true">Mar 2018 - Dec 2020</div>
+                        <p class="description" contenteditable="true">
+                            Designed user interfaces for e-commerce platforms and SaaS applications. 
+                            Created wireframes, prototypes, and design systems. 
+                            Improved user satisfaction scores by 35% through iterative design process.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section draggable" data-section="skills">
+                <h2 class="section-title">Core Skills</h2>
+                <div class="skills-container">
+                    <div class="skill-group">
+                        <div class="skill-group-title">Design Tools</div>
+                        <div class="skill-item">
+                            <span class="skill-name" contenteditable="true">Figma</span>
+                            <span class="skill-level">Expert</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name" contenteditable="true">Adobe Creative Suite</span>
+                            <span class="skill-level">Advanced</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name" contenteditable="true">Sketch</span>
+                            <span class="skill-level">Advanced</span>
+                        </div>
+                    </div>
+                    <div class="skill-group">
+                        <div class="skill-group-title">Technical Skills</div>
+                        <div class="skill-item">
+                            <span class="skill-name" contenteditable="true">HTML/CSS</span>
+                            <span class="skill-level">Proficient</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name" contenteditable="true">JavaScript</span>
+                            <span class="skill-level">Intermediate</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name" contenteditable="true">Prototyping</span>
+                            <span class="skill-level">Expert</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section draggable" data-section="education">
+                <h2 class="section-title">Education</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h3 class="degree-title" contenteditable="true">Bachelor of Fine Arts in Graphic Design</h3>
+                        <div class="institution" contenteditable="true">California College of the Arts</div>
+                        <div class="date-range" contenteditable="true">2014 - 2018</div>
+                        <p class="description" contenteditable="true">
+                            Concentration in Digital Media and User Experience Design. 
+                            Graduated Cum Laude. Senior thesis on mobile app accessibility.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Listen for messages from parent window (ResumePreview.tsx)
+        window.addEventListener("message", function (event) {
+            if (event.data && event.data.type === "RESUME_DATA") {
+                renderResumeData(event.data.payload);
+            }
+        });
+
+        function renderResumeData(data) {
+            if (!data) return;
+            if (!data.sections) data.sections = {};
+            if (data.skills && !data.sections.skills) data.sections.skills = data.skills;
+            if (data.workExperience && !data.sections.workExperience) data.sections.workExperience = data.workExperience;
+            else if (data.workHistory && !data.sections.workExperience) data.sections.workExperience = data.workHistory;
+            if (data.education && !data.sections.education) data.sections.education = data.education;
+            if (!data.personalInfo) data.personalInfo = {};
+
+            // Render personal info
+            if (data.personalInfo.fullName) {
+                const nameElement = document.querySelector('.name');
+                if (nameElement) nameElement.textContent = data.personalInfo.fullName;
+            }
+            if (data.personalInfo.professionalTitle) {
+                const titleElement = document.querySelector('.title');
+                if (titleElement) titleElement.textContent = data.personalInfo.professionalTitle;
+            }
+            if (data.personalInfo.professionalSummary) {
+                const summaryElement = document.querySelector('.summary-text');
+                if (summaryElement) summaryElement.textContent = data.personalInfo.professionalSummary;
+            }
+
+            // Render contact info - Template10 has direct contact-item elements in header
+            const contactItems = document.querySelectorAll('.header .contact-item');
+            if (contactItems.length >= 4) {
+                if (data.personalInfo.email) contactItems[0].textContent = data.personalInfo.email;
+                if (data.personalInfo.phone) contactItems[1].textContent = data.personalInfo.phone;
+                if (data.personalInfo.address) contactItems[2].textContent = data.personalInfo.address;
+                if (data.personalInfo.linkedin) contactItems[3].textContent = data.personalInfo.linkedin;
+            }
+
+            renderSections(data.sections);
+            hideEmptySections();
+        }
+
+        function renderSections(sections) {
+            for (const [sectionKey, sectionData] of Object.entries(sections)) {
+                switch (sectionKey) {
+                    case 'skills': renderSkills(sectionData); break;
+                    case 'workExperience': renderWorkExperience(sectionData); break;
+                    case 'education': renderEducation(sectionData); break;
+                }
+            }
+        }
+
+        function renderSkills(skills) {
+            const skillsContainer = document.querySelector('.section[data-section="skills"]');
+            if (!skillsContainer || !skills || skills.length === 0) {
+                if (skillsContainer) skillsContainer.style.display = 'none';
+                return;
+            }
+
+            const skillGroups = skillsContainer.querySelectorAll('.skill-group');
+            if (skillGroups.length > 0) {
+                // Clear first skill group and populate with skills
+                const firstGroup = skillGroups[0];
+                // Remove existing skill items but keep the title
+                const existingSkills = firstGroup.querySelectorAll('.skill-item');
+                existingSkills.forEach(skill => skill.remove());
+
+                skills.forEach(skill => {
+                    const skillElement = document.createElement('div');
+                    skillElement.className = 'skill-item';
+                    skillElement.innerHTML = `
+                        <span class="skill-name" contenteditable="true">${skill.name || skill.skill || ''}</span>
+                        <span class="skill-level">${getSkillLevel(skill.proficiency || skill.level || 5)}</span>
+                    `;
+                    firstGroup.appendChild(skillElement);
+                });
+            }
+            skillsContainer.style.display = 'block';
+        }
+
+        function renderWorkExperience(experiences) {
+            const experienceContainer = document.querySelector('.section[data-section="experience"]');
+            if (!experienceContainer || !experiences || experiences.length === 0) {
+                if (experienceContainer) experienceContainer.style.display = 'none';
+                return;
+            }
+
+            const timeline = experienceContainer.querySelector('.timeline');
+            if (!timeline) return;
+
+            timeline.innerHTML = '';
+            experiences.forEach(exp => {
+                const expElement = document.createElement('div');
+                expElement.className = 'timeline-item';
+                expElement.innerHTML = `
+                    <h3 class="job-title" contenteditable="true">${exp.position || exp.title || ''}</h3>
+                    <div class="company" contenteditable="true">${exp.company || ''}</div>
+                    <div class="date-range" contenteditable="true">${exp.startDate || ''} - ${exp.endDate || 'Present'}</div>
+                    <p class="description" contenteditable="true">${exp.description || ''}</p>
+                `;
+                timeline.appendChild(expElement);
+            });
+            experienceContainer.style.display = 'block';
+        }
+
+        function renderEducation(educations) {
+            const educationContainer = document.querySelector('.section[data-section="education"]');
+            if (!educationContainer || !educations || educations.length === 0) {
+                if (educationContainer) educationContainer.style.display = 'none';
+                return;
+            }
+
+            const timeline = educationContainer.querySelector('.timeline');
+            if (!timeline) return;
+
+            timeline.innerHTML = '';
+            educations.forEach(edu => {
+                const eduElement = document.createElement('div');
+                eduElement.className = 'timeline-item';
+                eduElement.innerHTML = `
+                    <h3 class="degree-title" contenteditable="true">${edu.degree || edu.title || ''}</h3>
+                    <div class="institution" contenteditable="true">${edu.institution || edu.school || ''}</div>
+                    <div class="date-range" contenteditable="true">${edu.startDate || ''} - ${edu.endDate || ''}</div>
+                    <p class="description" contenteditable="true">${edu.description || ''}</p>
+                `;
+                timeline.appendChild(eduElement);
+            });
+            educationContainer.style.display = 'block';
+        }
+
+        function getSkillLevel(proficiency) {
+            if (proficiency >= 9) return 'Expert';
+            if (proficiency >= 7) return 'Advanced';
+            if (proficiency >= 5) return 'Intermediate';
+            return 'Beginner';
+        }
+
+        // Drag and Drop Functionality
+        let draggedElement = null;
+        let placeholder = null;
+        let dropPosition = null;
+        let targetElement = null;
+
+        function updateDropPosition(e, target) {
+            if (!target || !draggedElement) return;
+
+            target.classList.add('drag-over');
+            const rect = target.getBoundingClientRect();
+            const midpoint = rect.top + rect.height / 2;
+            const insertBefore = e.clientY < midpoint;
+
+            dropPosition = {
+                target: target,
+                insertBefore: insertBefore,
+                parent: target.parentNode,
+                nextSibling: insertBefore ? target : target.nextSibling
+            };
+
+            if (placeholder && placeholder.parentNode) {
+                placeholder.parentNode.removeChild(placeholder);
+            }
+
+            try {
+                if (insertBefore) {
+                    target.parentNode.insertBefore(placeholder, target);
+                } else {
+                    target.parentNode.insertBefore(placeholder, target.nextSibling);
+                }
+
+                requestAnimationFrame(() => {
+                    if (placeholder && placeholder.parentNode) {
+                        placeholder.style.opacity = '1';
+                        placeholder.style.transform = 'scale(1)';
+                    }
+                });
+            } catch (error) {
+                console.log('Placeholder insertion failed:', error);
+            }
+        }
+
+        function createPlaceholder() {
+            const div = document.createElement('div');
+            div.className = 'drag-placeholder';
+            div.style.opacity = '0';
+            div.style.transform = 'scale(0.8)';
+            return div;
+        }
+
+        function handleDragStart(e) {
+            draggedElement = this;
+            this.classList.add('being-dragged');
+
+            placeholder = createPlaceholder();
+
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.outerHTML);
+
+            setTimeout(() => {
+                this.style.opacity = '0.5';
+            }, 0);
+        }
+
+        function handleDragEnd(e) {
+            this.classList.remove('being-dragged');
+            this.style.opacity = '';
+
+            document.querySelectorAll('.drag-over').forEach(el => {
+                el.classList.remove('drag-over');
+            });
+
+            if (placeholder && placeholder.parentNode) {
+                placeholder.parentNode.removeChild(placeholder);
+            }
+
+            draggedElement = null;
+            placeholder = null;
+            dropPosition = null;
+            targetElement = null;
+        }
+
+        function handleDragEnter(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (!draggedElement || this === draggedElement || !this.classList.contains('draggable')) {
+                return;
+            }
+
+            const draggedContainer = draggedElement.closest('.content');
+            const targetContainer = this.closest('.content');
+
+            if (draggedContainer !== targetContainer) {
+                return;
+            }
+
+            targetElement = this;
+            updateDropPosition(e, this);
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (!draggedElement || this === draggedElement || !this.classList.contains('draggable')) {
+                return;
+            }
+
+            updateDropPosition(e, this);
+            e.dataTransfer.dropEffect = 'move';
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (!this.contains(e.relatedTarget)) {
+                this.classList.remove('drag-over');
+            }
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            document.querySelectorAll('.drag-over').forEach(el => {
+                el.classList.remove('drag-over');
+            });
+
+            if (!draggedElement || !dropPosition) {
+                return false;
+            }
+
+            const draggedContainer = draggedElement.closest('.content');
+            const targetContainer = dropPosition.target.closest('.content');
+
+            if (draggedContainer !== targetContainer) {
+                return false;
+            }
+
+            try {
+                if (placeholder && placeholder.parentNode) {
+                    placeholder.parentNode.removeChild(placeholder);
+                }
+
+                if (dropPosition.nextSibling && dropPosition.nextSibling.parentNode) {
+                    dropPosition.parent.insertBefore(draggedElement, dropPosition.nextSibling);
+                } else {
+                    dropPosition.parent.appendChild(draggedElement);
+                }
+
+                draggedElement.style.transition = 'transform 0.2s ease';
+                draggedElement.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    draggedElement.style.transform = '';
+                    setTimeout(() => {
+                        draggedElement.style.transition = '';
+                    }, 200);
+                }, 100);
+
+            } catch (error) {
+                console.log('Drop failed:', error);
+            }
+
+            return false;
+        }
+
+        // Initialize drag and drop
+        document.addEventListener('DOMContentLoaded', function() {
+            const draggableElements = document.querySelectorAll('.draggable');
+
+            draggableElements.forEach(element => {
+                element.draggable = true;
+                element.addEventListener('dragstart', handleDragStart);
+                element.addEventListener('dragend', handleDragEnd);
+                element.addEventListener('dragenter', handleDragEnter);
+                element.addEventListener('dragover', handleDragOver);
+                element.addEventListener('dragleave', handleDragLeave);
+                element.addEventListener('drop', handleDrop);
+            });
+        });
+
+        // Hide empty sections
+        function hideEmptySections() {
+            const sections = document.querySelectorAll('.section[data-section]');
+            sections.forEach(section => {
+                const sectionType = section.getAttribute('data-section');
+                let isEmpty = false;
+
+                if (sectionType === 'skills') {
+                    const skillNames = section.querySelectorAll('.skill-name');
+                    isEmpty = Array.from(skillNames).every(skill => !skill.textContent.trim());
+                } else if (sectionType === 'experience') {
+                    const jobTitles = section.querySelectorAll('.job-title');
+                    isEmpty = Array.from(jobTitles).every(title => !title.textContent.trim());
+                } else if (sectionType === 'education') {
+                    const degreeTitles = section.querySelectorAll('.degree-title');
+                    isEmpty = Array.from(degreeTitles).every(title => !title.textContent.trim());
+                } else if (sectionType === 'summary') {
+                    const summaryText = section.querySelector('.summary-text');
+                    isEmpty = !summaryText || !summaryText.textContent.trim();
+                }
+
+                section.style.display = isEmpty ? 'none' : 'block';
+            });
+        }
+
+        // Check for empty sections on load and content change
+        document.addEventListener('DOMContentLoaded', hideEmptySections);
+        document.addEventListener('input', hideEmptySections);
+
+        // Re-initialize drag and drop after data is loaded
+        window.addEventListener("message", function (event) {
+            if (event.data && event.data.type === "RESUME_DATA") {
+                setTimeout(() => {
+                    const draggableElements = document.querySelectorAll('.draggable');
+                    draggableElements.forEach(element => {
+                        element.draggable = true;
+                        element.addEventListener('dragstart', handleDragStart);
+                        element.addEventListener('dragend', handleDragEnd);
+                        element.addEventListener('dragenter', handleDragEnter);
+                        element.addEventListener('dragover', handleDragOver);
+                        element.addEventListener('dragleave', handleDragLeave);
+                        element.addEventListener('drop', handleDrop);
+                    });
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>

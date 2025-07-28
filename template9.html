@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Resume Template 9</title>
+    <script>
+        // This template receives data via postMessage from ResumePreview.tsx
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Calibri', 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+
+        /* Universal text overflow handling */
+        .container * {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+            max-width: 100%;
+        }
+
+        /* Force break long URLs and text */
+        a, .contact-text, .skill-name, .project-link, 
+        .contact-item, .contact-item *, 
+        [href], [href] * {
+            word-break: break-all !important;
+            overflow-wrap: break-word !important;
+            hyphens: none !important;
+            max-width: 100% !important;
+            white-space: normal !important;
+        }
+
+        .container {
+            max-width: 210mm;
+            margin: 20px auto;
+            background: white;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            min-height: 297mm;
+            display: grid;
+            grid-template-rows: auto 1fr;
+        }
+
+        .header {
+            background: #1a365d;
+            color: white;
+            padding: 35px 40px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .header-left {
+            text-align: left;
+        }
+
+        .name {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .title {
+            font-size: 18px;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .header-right {
+            text-align: right;
+        }
+
+        .contact-item {
+            margin-bottom: 8px;
+            font-size: 14px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-all;
+            max-width: 100%;
+            min-width: 0;
+            white-space: normal;
+            hyphens: none;
+        }
+
+        .content {
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+        }
+
+        .section {
+            margin-bottom: 35px;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateZ(0);
+        }
+
+        .section.draggable {
+            cursor: grab;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px -15px;
+            transition: all 0.3s ease;
+        }
+
+        .section.draggable:hover {
+            background-color: rgba(0,0,0,0.02);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .section.being-dragged {
+            opacity: 0.5;
+            transform: rotate(2deg) scale(0.95);
+            z-index: 1000;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1a365d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #1a365d;
+        }
+
+        .summary-text {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #555;
+            text-align: justify;
+        }
+
+        .experience-item, .education-item {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .experience-item:last-child, .education-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .job-title, .degree-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: #1a365d;
+            margin-bottom: 5px;
+        }
+
+        .company, .institution {
+            font-size: 15px;
+            color: #666;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .date-range {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 12px;
+            background: #f0f0f0;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .description {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .skill-category {
+            margin-bottom: 25px;
+        }
+
+        .skill-category-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a365d;
+            margin-bottom: 12px;
+            border-left: 4px solid #1a365d;
+            padding-left: 12px;
+        }
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .skill-tag {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #495057;
+            transition: all 0.3s ease;
+        }
+
+        .skill-tag:hover {
+            background: #1a365d;
+            color: white;
+            border-color: #1a365d;
+        }
+
+        /* Drag and drop placeholder */
+        .drag-placeholder {
+            height: 4px;
+            background: #1a365d;
+            margin: 10px 0;
+            border-radius: 2px;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+        }
+
+        .drag-over {
+            background-color: rgba(26, 54, 93, 0.05);
+            border: 2px dashed #1a365d;
+        }
+
+        /* Print styles */
+        @media print {
+            body { background: white; }
+            .container { 
+                box-shadow: none; 
+                margin: 0;
+                max-width: none;
+                width: 100%;
+            }
+            .section.draggable:hover {
+                background-color: transparent;
+                transform: none;
+                box-shadow: none;
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .header {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 20px;
+                padding: 25px 20px;
+            }
+            
+            .header-right {
+                text-align: center;
+            }
+            
+            .content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <h1 class="name" contenteditable="true">Emily Rodriguez</h1>
+                <p class="title" contenteditable="true">Project Manager</p>
+            </div>
+            <div class="header-right">
+                <div class="contact-item" contenteditable="true">emily.rodriguez@email.com</div>
+                <div class="contact-item" contenteditable="true">+1-555-369-2580</div>
+                <div class="contact-item" contenteditable="true">Seattle, WA</div>
+                <div class="contact-item" contenteditable="true">linkedin.com/in/emilyrodriguez</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="main-column">
+                <div class="section draggable" data-section="summary">
+                    <h2 class="section-title">Professional Summary</h2>
+                    <p class="summary-text" contenteditable="true">
+                        Experienced project manager with 8+ years of expertise in leading cross-functional teams 
+                        and delivering complex projects on time and within budget. Proven track record of improving 
+                        operational efficiency by 40% and managing portfolios worth $10M+. Certified PMP with 
+                        strong analytical and communication skills.
+                    </p>
+                </div>
+
+                <div class="section draggable" data-section="experience">
+                    <h2 class="section-title">Professional Experience</h2>
+                    <div class="experience-item">
+                        <h3 class="job-title" contenteditable="true">Senior Project Manager</h3>
+                        <div class="company" contenteditable="true">Tech Innovations Inc.</div>
+                        <div class="date-range" contenteditable="true">May 2019 - Present</div>
+                        <p class="description" contenteditable="true">
+                            Lead multiple concurrent projects with budgets ranging from $500K to $3M. 
+                            Implemented Agile methodologies resulting in 30% faster delivery times. 
+                            Manage stakeholder relationships and coordinate with teams of 15+ members.
+                        </p>
+                    </div>
+                    <div class="experience-item">
+                        <h3 class="job-title" contenteditable="true">Project Coordinator</h3>
+                        <div class="company" contenteditable="true">Digital Solutions Group</div>
+                        <div class="date-range" contenteditable="true">Aug 2016 - Apr 2019</div>
+                        <p class="description" contenteditable="true">
+                            Coordinated project activities and maintained project documentation. 
+                            Assisted in risk management and quality assurance processes. 
+                            Supported senior managers in client communications and project planning.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="section draggable" data-section="education">
+                    <h2 class="section-title">Education</h2>
+                    <div class="education-item">
+                        <h3 class="degree-title" contenteditable="true">Master of Business Administration</h3>
+                        <div class="institution" contenteditable="true">University of Washington</div>
+                        <div class="date-range" contenteditable="true">2014 - 2016</div>
+                        <p class="description" contenteditable="true">
+                            Concentration in Operations Management and Leadership. 
+                            Graduated with Distinction. Thesis on Agile Project Management.
+                        </p>
+                    </div>
+                    <div class="education-item">
+                        <h3 class="degree-title" contenteditable="true">Bachelor of Science in Engineering</h3>
+                        <div class="institution" contenteditable="true">Seattle University</div>
+                        <div class="date-range" contenteditable="true">2010 - 2014</div>
+                        <p class="description" contenteditable="true">
+                            Industrial Engineering major. Summa Cum Laude graduate. 
+                            President of Engineering Student Association.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="section draggable" data-section="skills">
+                    <h2 class="section-title">Core Skills</h2>
+                    <div class="skill-category">
+                        <div class="skill-category-title">Project Management</div>
+                        <div class="skill-list">
+                            <span class="skill-tag" contenteditable="true">Agile/Scrum</span>
+                            <span class="skill-tag" contenteditable="true">Waterfall</span>
+                            <span class="skill-tag" contenteditable="true">Risk Management</span>
+                            <span class="skill-tag" contenteditable="true">Budget Planning</span>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <div class="skill-category-title">Tools & Software</div>
+                        <div class="skill-list">
+                            <span class="skill-tag" contenteditable="true">Microsoft Project</span>
+                            <span class="skill-tag" contenteditable="true">Jira</span>
+                            <span class="skill-tag" contenteditable="true">Trello</span>
+                            <span class="skill-tag" contenteditable="true">Slack</span>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <div class="skill-category-title">Leadership</div>
+                        <div class="skill-list">
+                            <span class="skill-tag" contenteditable="true">Team Management</span>
+                            <span class="skill-tag" contenteditable="true">Stakeholder Relations</span>
+                            <span class="skill-tag" contenteditable="true">Conflict Resolution</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Listen for messages from parent window (ResumePreview.tsx)
+        window.addEventListener("message", function (event) {
+            if (event.data && event.data.type === "RESUME_DATA") {
+                renderResumeData(event.data.payload);
+            }
+        });
+
+        function renderResumeData(data) {
+            if (!data) return;
+            if (!data.sections) data.sections = {};
+            if (data.skills && !data.sections.skills) data.sections.skills = data.skills;
+            if (data.workExperience && !data.sections.workExperience) data.sections.workExperience = data.workExperience;
+            else if (data.workHistory && !data.sections.workExperience) data.sections.workExperience = data.workHistory;
+            if (data.education && !data.sections.education) data.sections.education = data.education;
+            if (!data.personalInfo) data.personalInfo = {};
+
+            // Render personal info
+            if (data.personalInfo.fullName) {
+                const nameElement = document.querySelector('.name');
+                if (nameElement) nameElement.textContent = data.personalInfo.fullName;
+            }
+            if (data.personalInfo.professionalTitle) {
+                const titleElement = document.querySelector('.title');
+                if (titleElement) titleElement.textContent = data.personalInfo.professionalTitle;
+            }
+            if (data.personalInfo.professionalSummary) {
+                const summaryElement = document.querySelector('.summary-text');
+                if (summaryElement) summaryElement.textContent = data.personalInfo.professionalSummary;
+            }
+
+            // Render contact info - Template9 has direct contact-item elements in header-right
+            const contactItems = document.querySelectorAll('.header-right .contact-item');
+            if (contactItems.length >= 4) {
+                if (data.personalInfo.email) contactItems[0].textContent = data.personalInfo.email;
+                if (data.personalInfo.phone) contactItems[1].textContent = data.personalInfo.phone;
+                if (data.personalInfo.address) contactItems[2].textContent = data.personalInfo.address;
+                if (data.personalInfo.linkedin) contactItems[3].textContent = data.personalInfo.linkedin;
+            }
+
+            renderSections(data.sections);
+            hideEmptySections();
+        }
+
+        function renderSections(sections) {
+            for (const [sectionKey, sectionData] of Object.entries(sections)) {
+                switch (sectionKey) {
+                    case 'skills': renderSkills(sectionData); break;
+                    case 'workExperience': renderWorkExperience(sectionData); break;
+                    case 'education': renderEducation(sectionData); break;
+                }
+            }
+        }
+
+        function renderSkills(skills) {
+            const skillsContainer = document.querySelector('.section[data-section="skills"]');
+            if (!skillsContainer || !skills || skills.length === 0) {
+                if (skillsContainer) skillsContainer.style.display = 'none';
+                return;
+            }
+
+            // Clear existing skill categories
+            const skillCategories = skillsContainer.querySelectorAll('.skill-category');
+            skillCategories.forEach(category => {
+                const skillList = category.querySelector('.skill-list');
+                if (skillList) skillList.innerHTML = '';
+            });
+
+            // Group skills by category or add to first category
+            const firstCategory = skillsContainer.querySelector('.skill-list');
+            if (firstCategory) {
+                skills.forEach(skill => {
+                    const skillTag = document.createElement('span');
+                    skillTag.className = 'skill-tag';
+                    skillTag.contentEditable = 'true';
+                    skillTag.textContent = skill.name || skill.skill || '';
+                    firstCategory.appendChild(skillTag);
+                });
+            }
+            skillsContainer.style.display = 'block';
+        }
+
+        function renderWorkExperience(experiences) {
+            const experienceContainer = document.querySelector('.section[data-section="experience"]');
+            if (!experienceContainer || !experiences || experiences.length === 0) {
+                if (experienceContainer) experienceContainer.style.display = 'none';
+                return;
+            }
+
+            // Remove existing experience items but keep the section title
+            const existingExperiences = experienceContainer.querySelectorAll('.experience-item');
+            existingExperiences.forEach(exp => exp.remove());
+
+            experiences.forEach(exp => {
+                const expElement = document.createElement('div');
+                expElement.className = 'experience-item';
+                expElement.innerHTML = `
+                    <h3 class="job-title" contenteditable="true">${exp.position || exp.title || ''}</h3>
+                    <div class="company" contenteditable="true">${exp.company || ''}</div>
+                    <div class="date-range" contenteditable="true">${exp.startDate || ''} - ${exp.endDate || 'Present'}</div>
+                    <p class="description" contenteditable="true">${exp.description || ''}</p>
+                `;
+                experienceContainer.appendChild(expElement);
+            });
+            experienceContainer.style.display = 'block';
+        }
+
+        function renderEducation(educations) {
+            const educationContainer = document.querySelector('.section[data-section="education"]');
+            if (!educationContainer || !educations || educations.length === 0) {
+                if (educationContainer) educationContainer.style.display = 'none';
+                return;
+            }
+
+            // Remove existing education items but keep the section title
+            const existingEducations = educationContainer.querySelectorAll('.education-item');
+            existingEducations.forEach(edu => edu.remove());
+
+            educations.forEach(edu => {
+                const eduElement = document.createElement('div');
+                eduElement.className = 'education-item';
+                eduElement.innerHTML = `
+                    <h3 class="degree-title" contenteditable="true">${edu.degree || edu.title || ''}</h3>
+                    <div class="institution" contenteditable="true">${edu.institution || edu.school || ''}</div>
+                    <div class="date-range" contenteditable="true">${edu.startDate || ''} - ${edu.endDate || ''}</div>
+                    <p class="description" contenteditable="true">${edu.description || ''}</p>
+                `;
+                educationContainer.appendChild(eduElement);
+            });
+            educationContainer.style.display = 'block';
+        }
+
+        // Drag and Drop Functionality
+        let draggedElement = null;
+        let placeholder = null;
+        let dropPosition = null;
+        let targetElement = null;
+
+        function updateDropPosition(e, target) {
+            if (!target || !draggedElement) return;
+
+            target.classList.add('drag-over');
+            const rect = target.getBoundingClientRect();
+            const midpoint = rect.top + rect.height / 2;
+            const insertBefore = e.clientY < midpoint;
+
+            dropPosition = {
+                target: target,
+                insertBefore: insertBefore,
+                parent: target.parentNode,
+                nextSibling: insertBefore ? target : target.nextSibling
+            };
+
+            if (placeholder && placeholder.parentNode) {
+                placeholder.parentNode.removeChild(placeholder);
+            }
+
+            try {
+                if (insertBefore) {
+                    target.parentNode.insertBefore(placeholder, target);
+                } else {
+                    target.parentNode.insertBefore(placeholder, target.nextSibling);
+                }
+
+                requestAnimationFrame(() => {
+                    if (placeholder && placeholder.parentNode) {
+                        placeholder.style.opacity = '1';
+                        placeholder.style.transform = 'scale(1)';
+                    }
+                });
+            } catch (error) {
+                console.log('Placeholder insertion failed:', error);
+            }
+        }
+
+        function createPlaceholder() {
+            const div = document.createElement('div');
+            div.className = 'drag-placeholder';
+            div.style.opacity = '0';
+            div.style.transform = 'scale(0.8)';
+            return div;
+        }
+
+        function handleDragStart(e) {
+            draggedElement = this;
+            this.classList.add('being-dragged');
+
+            placeholder = createPlaceholder();
+
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.outerHTML);
+
+            setTimeout(() => {
+                this.style.opacity = '0.5';
+            }, 0);
+        }
+
+        function handleDragEnd(e) {
+            this.classList.remove('being-dragged');
+            this.style.opacity = '';
+
+            document.querySelectorAll('.drag-over').forEach(el => {
+                el.classList.remove('drag-over');
+            });
+
+            if (placeholder && placeholder.parentNode) {
+                placeholder.parentNode.removeChild(placeholder);
+            }
+
+            draggedElement = null;
+            placeholder = null;
+            dropPosition = null;
+            targetElement = null;
+        }
+
+        function handleDragEnter(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (!draggedElement || this === draggedElement || !this.classList.contains('draggable')) {
+                return;
+            }
+
+            const draggedContainer = draggedElement.closest('.main-column, .sidebar');
+            const targetContainer = this.closest('.main-column, .sidebar');
+
+            if (draggedContainer !== targetContainer) {
+                return;
+            }
+
+            targetElement = this;
+            updateDropPosition(e, this);
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (!draggedElement || this === draggedElement || !this.classList.contains('draggable')) {
+                return;
+            }
+
+            updateDropPosition(e, this);
+            e.dataTransfer.dropEffect = 'move';
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (!this.contains(e.relatedTarget)) {
+                this.classList.remove('drag-over');
+            }
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            document.querySelectorAll('.drag-over').forEach(el => {
+                el.classList.remove('drag-over');
+            });
+
+            if (!draggedElement || !dropPosition) {
+                return false;
+            }
+
+            const draggedContainer = draggedElement.closest('.main-column, .sidebar');
+            const targetContainer = dropPosition.target.closest('.main-column, .sidebar');
+
+            if (draggedContainer !== targetContainer) {
+                return false;
+            }
+
+            try {
+                if (placeholder && placeholder.parentNode) {
+                    placeholder.parentNode.removeChild(placeholder);
+                }
+
+                if (dropPosition.nextSibling && dropPosition.nextSibling.parentNode) {
+                    dropPosition.parent.insertBefore(draggedElement, dropPosition.nextSibling);
+                } else {
+                    dropPosition.parent.appendChild(draggedElement);
+                }
+
+                draggedElement.style.transition = 'transform 0.2s ease';
+                draggedElement.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    draggedElement.style.transform = '';
+                    setTimeout(() => {
+                        draggedElement.style.transition = '';
+                    }, 200);
+                }, 100);
+
+            } catch (error) {
+                console.log('Drop failed:', error);
+            }
+
+            return false;
+        }
+
+        // Initialize drag and drop
+        document.addEventListener('DOMContentLoaded', function() {
+            const draggableElements = document.querySelectorAll('.draggable');
+
+            draggableElements.forEach(element => {
+                element.draggable = true;
+                element.addEventListener('dragstart', handleDragStart);
+                element.addEventListener('dragend', handleDragEnd);
+                element.addEventListener('dragenter', handleDragEnter);
+                element.addEventListener('dragover', handleDragOver);
+                element.addEventListener('dragleave', handleDragLeave);
+                element.addEventListener('drop', handleDrop);
+            });
+        });
+
+        // Hide empty sections
+        function hideEmptySections() {
+            const sections = document.querySelectorAll('.section[data-section]');
+            sections.forEach(section => {
+                const sectionType = section.getAttribute('data-section');
+                let isEmpty = false;
+
+                if (sectionType === 'skills') {
+                    const skillTags = section.querySelectorAll('.skill-tag');
+                    isEmpty = Array.from(skillTags).every(tag => !tag.textContent.trim());
+                } else if (sectionType === 'experience') {
+                    const jobTitles = section.querySelectorAll('.job-title');
+                    isEmpty = Array.from(jobTitles).every(title => !title.textContent.trim());
+                } else if (sectionType === 'education') {
+                    const degreeTitles = section.querySelectorAll('.degree-title');
+                    isEmpty = Array.from(degreeTitles).every(title => !title.textContent.trim());
+                } else if (sectionType === 'summary') {
+                    const summaryText = section.querySelector('.summary-text');
+                    isEmpty = !summaryText || !summaryText.textContent.trim();
+                }
+
+                section.style.display = isEmpty ? 'none' : 'block';
+            });
+        }
+
+        // Check for empty sections on load and content change
+        document.addEventListener('DOMContentLoaded', hideEmptySections);
+        document.addEventListener('input', hideEmptySections);
+
+        // Re-initialize drag and drop after data is loaded
+        window.addEventListener("message", function (event) {
+            if (event.data && event.data.type === "RESUME_DATA") {
+                setTimeout(() => {
+                    const draggableElements = document.querySelectorAll('.draggable');
+                    draggableElements.forEach(element => {
+                        element.draggable = true;
+                        element.addEventListener('dragstart', handleDragStart);
+                        element.addEventListener('dragend', handleDragEnd);
+                        element.addEventListener('dragenter', handleDragEnter);
+                        element.addEventListener('dragover', handleDragOver);
+                        element.addEventListener('dragleave', handleDragLeave);
+                        element.addEventListener('drop', handleDrop);
+                    });
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>
