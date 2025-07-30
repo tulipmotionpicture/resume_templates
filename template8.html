@@ -22,7 +22,7 @@
         }
 
         /* Universal text overflow handling */
-        .container * {
+        .resumetemplate_container * {
             word-wrap: break-word;
             overflow-wrap: break-word;
             hyphens: auto;
@@ -40,7 +40,7 @@
             white-space: normal !important;
         }
 
-        .container {
+        .resumetemplate_container {
             max-width: 210mm;
             margin: 20px auto;
             background: white;
@@ -232,7 +232,7 @@
         /* Print styles */
         @media print {
             body { background: white; }
-            .container { 
+            .resumetemplate_container { 
                 box-shadow: none; 
                 margin: 0;
                 max-width: none;
@@ -248,7 +248,7 @@
 
         /* Responsive design */
         @media (max-width: 768px) {
-            .container {
+            .resumetemplate_container {
                 margin: 10px;
                 padding: 30px 25px;
             }
@@ -270,7 +270,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="resumetemplate_container">
         <div class="header">
             <h1 class="name" contenteditable="true">Michael Chen</h1>
             <p class="title" contenteditable="true">Financial Analyst</p>
@@ -449,13 +449,13 @@
         }
 
         function renderSkills(skills) {
-            const skillsContainer = document.querySelector('.section[data-section="skills"]');
-            if (!skillsContainer || !skills || skills.length === 0) {
-                if (skillsContainer) skillsContainer.style.display = 'none';
+            const skillsresumetemplate_container = document.querySelector('.section[data-section="skills"]');
+            if (!skillsresumetemplate_container || !skills || skills.length === 0) {
+                if (skillsresumetemplate_container) skillsresumetemplate_container.style.display = 'none';
                 return;
             }
 
-            const skillsGrid = skillsContainer.querySelector('.skills-grid');
+            const skillsGrid = skillsresumetemplate_container.querySelector('.skills-grid');
             if (!skillsGrid) return;
 
             skillsGrid.innerHTML = '';
@@ -468,18 +468,18 @@
                 `;
                 skillsGrid.appendChild(skillElement);
             });
-            skillsContainer.style.display = 'block';
+            skillsresumetemplate_container.style.display = 'block';
         }
 
         function renderWorkExperience(experiences) {
-            const experienceContainer = document.querySelector('.section[data-section="experience"]');
-            if (!experienceContainer || !experiences || experiences.length === 0) {
-                if (experienceContainer) experienceContainer.style.display = 'none';
+            const experienceresumetemplate_container = document.querySelector('.section[data-section="experience"]');
+            if (!experienceresumetemplate_container || !experiences || experiences.length === 0) {
+                if (experienceresumetemplate_container) experienceresumetemplate_container.style.display = 'none';
                 return;
             }
 
             // Remove existing experience items but keep the section title
-            const existingExperiences = experienceContainer.querySelectorAll('.experience-item');
+            const existingExperiences = experienceresumetemplate_container.querySelectorAll('.experience-item');
             existingExperiences.forEach(exp => exp.remove());
 
             experiences.forEach(exp => {
@@ -491,20 +491,20 @@
                     <div class="date-range" contenteditable="true">${exp.startDate || ''} - ${exp.endDate || 'Present'}</div>
                     <p class="description" contenteditable="true">${exp.description || ''}</p>
                 `;
-                experienceContainer.appendChild(expElement);
+                experienceresumetemplate_container.appendChild(expElement);
             });
-            experienceContainer.style.display = 'block';
+            experienceresumetemplate_container.style.display = 'block';
         }
 
         function renderEducation(educations) {
-            const educationContainer = document.querySelector('.section[data-section="education"]');
-            if (!educationContainer || !educations || educations.length === 0) {
-                if (educationContainer) educationContainer.style.display = 'none';
+            const educationresumetemplate_container = document.querySelector('.section[data-section="education"]');
+            if (!educationresumetemplate_container || !educations || educations.length === 0) {
+                if (educationresumetemplate_container) educationresumetemplate_container.style.display = 'none';
                 return;
             }
 
             // Remove existing education items but keep the section title
-            const existingEducations = educationContainer.querySelectorAll('.education-item');
+            const existingEducations = educationresumetemplate_container.querySelectorAll('.education-item');
             existingEducations.forEach(edu => edu.remove());
 
             educations.forEach(edu => {
@@ -516,9 +516,9 @@
                     <div class="date-range" contenteditable="true">${edu.startDate || ''} - ${edu.endDate || ''}</div>
                     <p class="description" contenteditable="true">${edu.description || ''}</p>
                 `;
-                educationContainer.appendChild(eduElement);
+                educationresumetemplate_container.appendChild(eduElement);
             });
-            educationContainer.style.display = 'block';
+            educationresumetemplate_container.style.display = 'block';
         }
 
         function getSkillLevel(proficiency) {
@@ -619,10 +619,10 @@
                 return;
             }
 
-            const draggedContainer = draggedElement.closest('.container, .left-column, .right-column');
-            const targetContainer = this.closest('.container, .left-column, .right-column');
+            const draggedresumetemplate_container = draggedElement.closest('.resumetemplate_container, .left-column, .right-column');
+            const targetresumetemplate_container = this.closest('.resumetemplate_container, .left-column, .right-column');
 
-            if (draggedContainer !== targetContainer) {
+            if (draggedresumetemplate_container !== targetresumetemplate_container) {
                 return;
             }
 
@@ -663,10 +663,10 @@
                 return false;
             }
 
-            const draggedContainer = draggedElement.closest('.container, .left-column, .right-column');
-            const targetContainer = dropPosition.target.closest('.container, .left-column, .right-column');
+            const draggedresumetemplate_container = draggedElement.closest('.resumetemplate_container, .left-column, .right-column');
+            const targetresumetemplate_container = dropPosition.target.closest('.resumetemplate_container, .left-column, .right-column');
 
-            if (draggedContainer !== targetContainer) {
+            if (draggedresumetemplate_container !== targetresumetemplate_container) {
                 return false;
             }
 

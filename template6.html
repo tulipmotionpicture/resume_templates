@@ -54,7 +54,7 @@
             white-space: normal !important;
         }
 
-        .container {
+        .resumetemplate_container {
             max-width: 210mm;
             margin: 20px auto;
             background: white;
@@ -260,7 +260,7 @@
         /* Print styles */
         @media print {
             body { background: white; }
-            .container { 
+            .resumetemplate_container { 
                 box-shadow: none; 
                 margin: 0;
                 max-width: none;
@@ -275,7 +275,7 @@
 
         /* Responsive design */
         @media (max-width: 768px) {
-            .container {
+            .resumetemplate_container {
                 grid-template-columns: 1fr;
                 margin: 10px;
             }
@@ -291,7 +291,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="resumetemplate_container">
         <div class="sidebar">
             <div class="profile-section">
                 <h1 class="name" contenteditable="true">John Smith</h1>
@@ -562,11 +562,11 @@
 
         // Function to render skills
         function renderSkills(skills) {
-            const skillsContainer = document.querySelector('.section[data-section="skills"]');
-            if (!skillsContainer) return;
+            const skillsresumetemplate_container = document.querySelector('.section[data-section="skills"]');
+            if (!skillsresumetemplate_container) return;
 
             // Remove existing skill items but keep the section title
-            const existingSkills = skillsContainer.querySelectorAll('.skill-item');
+            const existingSkills = skillsresumetemplate_container.querySelectorAll('.skill-item');
             existingSkills.forEach(skill => skill.remove());
 
             if (skills && skills.length > 0) {
@@ -584,21 +584,21 @@
                         <div class="skill-percentage">${percentage}%</div>
                     `;
 
-                    skillsContainer.appendChild(skillElement);
+                    skillsresumetemplate_container.appendChild(skillElement);
                 });
-                skillsContainer.style.display = 'block';
+                skillsresumetemplate_container.style.display = 'block';
             } else {
-                skillsContainer.style.display = 'none';
+                skillsresumetemplate_container.style.display = 'none';
             }
         }
 
         // Function to render work experience
         function renderWorkExperience(experiences) {
-            const experienceContainer = document.querySelector('.section[data-section="experience"]');
-            if (!experienceContainer) return;
+            const experienceresumetemplate_container = document.querySelector('.section[data-section="experience"]');
+            if (!experienceresumetemplate_container) return;
 
             // Remove existing experience items but keep the section title
-            const existingExperiences = experienceContainer.querySelectorAll('.experience-item');
+            const existingExperiences = experienceresumetemplate_container.querySelectorAll('.experience-item');
             existingExperiences.forEach(exp => exp.remove());
 
             if (experiences && experiences.length > 0) {
@@ -615,21 +615,21 @@
                         <p class="description" contenteditable="true">${exp.description || ''}</p>
                     `;
 
-                    experienceContainer.appendChild(expElement);
+                    experienceresumetemplate_container.appendChild(expElement);
                 });
-                experienceContainer.style.display = 'block';
+                experienceresumetemplate_container.style.display = 'block';
             } else {
-                experienceContainer.style.display = 'none';
+                experienceresumetemplate_container.style.display = 'none';
             }
         }
 
         // Function to render education
         function renderEducation(educations) {
-            const educationContainer = document.querySelector('.section[data-section="education"]');
-            if (!educationContainer) return;
+            const educationresumetemplate_container = document.querySelector('.section[data-section="education"]');
+            if (!educationresumetemplate_container) return;
 
             // Remove existing education items but keep the section title
-            const existingEducations = educationContainer.querySelectorAll('.education-item');
+            const existingEducations = educationresumetemplate_container.querySelectorAll('.education-item');
             existingEducations.forEach(edu => edu.remove());
 
             if (educations && educations.length > 0) {
@@ -647,11 +647,11 @@
                         <p class="description" contenteditable="true">${edu.gpa ? `GPA: ${edu.gpa}` : (edu.description || '')}</p>
                     `;
 
-                    educationContainer.appendChild(eduElement);
+                    educationresumetemplate_container.appendChild(eduElement);
                 });
-                educationContainer.style.display = 'block';
+                educationresumetemplate_container.style.display = 'block';
             } else {
-                educationContainer.style.display = 'none';
+                educationresumetemplate_container.style.display = 'none';
             }
         }
 
@@ -776,10 +776,10 @@
                 return;
             }
 
-            const draggedContainer = draggedElement.closest('.sidebar, .main-content');
-            const targetContainer = this.closest('.sidebar, .main-content');
+            const draggedresumetemplate_container = draggedElement.closest('.sidebar, .main-content');
+            const targetresumetemplate_container = this.closest('.sidebar, .main-content');
 
-            if (draggedContainer !== targetContainer) {
+            if (draggedresumetemplate_container !== targetresumetemplate_container) {
                 return;
             }
 
@@ -820,10 +820,10 @@
                 return false;
             }
 
-            const draggedContainer = draggedElement.closest('.sidebar, .main-content');
-            const targetContainer = dropPosition.target.closest('.sidebar, .main-content');
+            const draggedresumetemplate_container = draggedElement.closest('.sidebar, .main-content');
+            const targetresumetemplate_container = dropPosition.target.closest('.sidebar, .main-content');
 
-            if (draggedContainer !== targetContainer) {
+            if (draggedresumetemplate_container !== targetresumetemplate_container) {
                 return false;
             }
 

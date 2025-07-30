@@ -53,7 +53,7 @@
             margin: 0;
         }
 
-        .resume-container {
+        .resumetemplate_container {
             display: flex;
             width: 210mm;  /* Exact A4 width */
             min-height: 297mm; /* Minimum A4 height */
@@ -67,7 +67,7 @@
         }
 
         @media screen {
-            .resume-container {
+            .resumetemplate_container {
                 width: 794px; /* Screen fallback */
                 max-width: 100vw;
             }
@@ -80,7 +80,7 @@
                 margin: 0;
             }
 
-            .resume-container {
+            .resumetemplate_container {
                 width: 210mm;
                 min-height: 297mm;
                 box-shadow: none;
@@ -98,7 +98,7 @@
             }
         }
 
-        .resume-container::before {
+        .resumetemplate_container::before {
             content: '';
             position: absolute;
             top: 0;
@@ -479,7 +479,7 @@
         }
 
         @media (max-width: 768px) {
-            .resume-container {
+            .resumetemplate_container {
                 flex-direction: column;
                 margin: 10px;
                 border-radius: 15px;
@@ -502,7 +502,7 @@
 </head>
 
 <body>
-    <div class="resume-container">
+    <div class="resumetemplate_container">
         <div class="sidebar">
             <div class="profile-section">
                 <img src="https://via.placeholder.com/140" alt="Profile Image" class="profile-img" id="profile-img">

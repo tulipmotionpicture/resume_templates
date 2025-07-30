@@ -22,7 +22,7 @@
         }
 
         /* Universal text overflow handling */
-        .container * {
+        .resumetemplate_container * {
             word-wrap: break-word;
             overflow-wrap: break-word;
             hyphens: auto;
@@ -40,7 +40,7 @@
             white-space: normal !important;
         }
 
-        .container {
+        .resumetemplate_container {
             max-width: 210mm;
             margin: 20px auto;
             background: white;
@@ -241,7 +241,7 @@
         /* Print styles */
         @media print {
             body { background: white; }
-            .container { 
+            .resumetemplate_container { 
                 box-shadow: none; 
                 margin: 0;
                 max-width: none;
@@ -256,7 +256,7 @@
 
         /* Responsive design */
         @media (max-width: 768px) {
-            .container {
+            .resumetemplate_container {
                 margin: 10px;
             }
             
@@ -280,7 +280,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="resumetemplate_container">
         <div class="header">
             <div class="header-left">
                 <h1 class="name" contenteditable="true">Emily Rodriguez</h1>
@@ -442,21 +442,21 @@
         }
 
         function renderSkills(skills) {
-            const skillsContainer = document.querySelector('.section[data-section="skills"]');
-            if (!skillsContainer || !skills || skills.length === 0) {
-                if (skillsContainer) skillsContainer.style.display = 'none';
+            const skillsresumetemplate_container = document.querySelector('.section[data-section="skills"]');
+            if (!skillsresumetemplate_container || !skills || skills.length === 0) {
+                if (skillsresumetemplate_container) skillsresumetemplate_container.style.display = 'none';
                 return;
             }
 
             // Clear existing skill categories
-            const skillCategories = skillsContainer.querySelectorAll('.skill-category');
+            const skillCategories = skillsresumetemplate_container.querySelectorAll('.skill-category');
             skillCategories.forEach(category => {
                 const skillList = category.querySelector('.skill-list');
                 if (skillList) skillList.innerHTML = '';
             });
 
             // Group skills by category or add to first category
-            const firstCategory = skillsContainer.querySelector('.skill-list');
+            const firstCategory = skillsresumetemplate_container.querySelector('.skill-list');
             if (firstCategory) {
                 skills.forEach(skill => {
                     const skillTag = document.createElement('span');
@@ -466,18 +466,18 @@
                     firstCategory.appendChild(skillTag);
                 });
             }
-            skillsContainer.style.display = 'block';
+            skillsresumetemplate_container.style.display = 'block';
         }
 
         function renderWorkExperience(experiences) {
-            const experienceContainer = document.querySelector('.section[data-section="experience"]');
-            if (!experienceContainer || !experiences || experiences.length === 0) {
-                if (experienceContainer) experienceContainer.style.display = 'none';
+            const experienceresumetemplate_container = document.querySelector('.section[data-section="experience"]');
+            if (!experienceresumetemplate_container || !experiences || experiences.length === 0) {
+                if (experienceresumetemplate_container) experienceresumetemplate_container.style.display = 'none';
                 return;
             }
 
             // Remove existing experience items but keep the section title
-            const existingExperiences = experienceContainer.querySelectorAll('.experience-item');
+            const existingExperiences = experienceresumetemplate_container.querySelectorAll('.experience-item');
             existingExperiences.forEach(exp => exp.remove());
 
             experiences.forEach(exp => {
@@ -489,20 +489,20 @@
                     <div class="date-range" contenteditable="true">${exp.startDate || ''} - ${exp.endDate || 'Present'}</div>
                     <p class="description" contenteditable="true">${exp.description || ''}</p>
                 `;
-                experienceContainer.appendChild(expElement);
+                experienceresumetemplate_container.appendChild(expElement);
             });
-            experienceContainer.style.display = 'block';
+            experienceresumetemplate_container.style.display = 'block';
         }
 
         function renderEducation(educations) {
-            const educationContainer = document.querySelector('.section[data-section="education"]');
-            if (!educationContainer || !educations || educations.length === 0) {
-                if (educationContainer) educationContainer.style.display = 'none';
+            const educationresumetemplate_container = document.querySelector('.section[data-section="education"]');
+            if (!educationresumetemplate_container || !educations || educations.length === 0) {
+                if (educationresumetemplate_container) educationresumetemplate_container.style.display = 'none';
                 return;
             }
 
             // Remove existing education items but keep the section title
-            const existingEducations = educationContainer.querySelectorAll('.education-item');
+            const existingEducations = educationresumetemplate_container.querySelectorAll('.education-item');
             existingEducations.forEach(edu => edu.remove());
 
             educations.forEach(edu => {
@@ -514,9 +514,9 @@
                     <div class="date-range" contenteditable="true">${edu.startDate || ''} - ${edu.endDate || ''}</div>
                     <p class="description" contenteditable="true">${edu.description || ''}</p>
                 `;
-                educationContainer.appendChild(eduElement);
+                educationresumetemplate_container.appendChild(eduElement);
             });
-            educationContainer.style.display = 'block';
+            educationresumetemplate_container.style.display = 'block';
         }
 
         // Drag and Drop Functionality
@@ -610,10 +610,10 @@
                 return;
             }
 
-            const draggedContainer = draggedElement.closest('.main-column, .sidebar');
-            const targetContainer = this.closest('.main-column, .sidebar');
+            const draggedresumetemplate_container = draggedElement.closest('.main-column, .sidebar');
+            const targetresumetemplate_container = this.closest('.main-column, .sidebar');
 
-            if (draggedContainer !== targetContainer) {
+            if (draggedresumetemplate_container !== targetresumetemplate_container) {
                 return;
             }
 
@@ -654,10 +654,10 @@
                 return false;
             }
 
-            const draggedContainer = draggedElement.closest('.main-column, .sidebar');
-            const targetContainer = dropPosition.target.closest('.main-column, .sidebar');
+            const draggedresumetemplate_container = draggedElement.closest('.main-column, .sidebar');
+            const targetresumetemplate_container = dropPosition.target.closest('.main-column, .sidebar');
 
-            if (draggedContainer !== targetContainer) {
+            if (draggedresumetemplate_container !== targetresumetemplate_container) {
                 return false;
             }
 
